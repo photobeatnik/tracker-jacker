@@ -59,8 +59,29 @@ public class SMSReceiver extends BroadcastReceiver {
      */
     private static final String TJ_GET_LOCATION_MSG = TJ_PREFIX + ":" + TJ_GET_LOCATION_CMD;
 
-    private static final String TJ_KNOWN_LOCATION_MSG = TJ_PREFIX + ":loc(%f::%f)";
+    private static final String TJ_KNOWN_LOCATION_MSG = TJ_PREFIX + ":loc(%f:%f)";
     private static final String TJ_UNKNOWN_LOCATION_MSG = TJ_PREFIX + ":loc(unknown)";
+
+    /**
+     * Send the location as text message to the given destination address.
+     *
+     * @param location
+     *            Specifies the location to use.
+     * @param destinationAddress
+     *            Specifies the address which should receive the location.
+     */
+    private void sendLocation(Location location, String destinationAddress) {
+        final String text;
+
+        if (location != null) {
+            text = String.format(TJ_KNOWN_LOCATION_MSG, location.getLongitude(), location.getLatitude());
+        } else {
+            text = TJ_UNKNOWN_LOCATION_MSG;
+        }
+
+        Log.d(TAG, "Sending location: " + text + " to: " + destinationAddress);
+        SmsManager.getDefault().sendTextMessage(destinationAddress, null, text, null, null);
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -84,45 +105,48 @@ public class SMSReceiver extends BroadcastReceiver {
 
                     // get gps coordinates and send back message to originator
                     // TODO probably better to start this in a service and own thread/process
+                    // TODO it is possible deactivated -> let user activate first? in app?
                     // get the location manager from the context
                     final LocationManager locationManager = (LocationManager) context
                             .getSystemService(Context.LOCATION_SERVICE);
-                    // get the best provider. TODO it is possible deactivated -> let user activate first? in app?
                     final String provider = locationManager.getBestProvider(new Criteria(), true);
+                    Log.d(TAG, "Found best location provider: " + provider);
 
-                    // request a single update of the location.
+                    // request a single update of the location with provider.
                     // locationManager.getLastKnownLocation(provider); <-- did not work with emulator
-                    // TODO getLastKnownLocation as fallback?
-                    locationManager.requestSingleUpdate(provider, new LocationListener() {
+                    // TODO getLastKnownLocation as fallback? (dont know if this works)
+                    final Location location = locationManager.getLastKnownLocation(provider);
 
-                        @Override
-                        public void onStatusChanged(String provider, int status, Bundle extras) { }
+                    if (location == null) {
+                        Log.d(TAG, "Using last known location...");
+                        sendLocation(location, originatingAddress);
+                    } else {
+                        Log.d(TAG, "Last known location unkown. Waiting for location update...");
+                        locationManager.requestSingleUpdate(provider, new LocationListener() {
 
-                        @Override
-                        public void onProviderEnabled(String provider) { }
-
-                        @Override
-                        public void onProviderDisabled(String provider) { }
-
-                        @Override
-                        public void onLocationChanged(Location location) {
-                            final String text;
-                            if (location != null) {
-                                Log.d(TAG, "Provider: " + provider //
-                                        + " Long: " + location.getLongitude() //
-                                        + " Lat: " + location.getLatitude());
-
-                                text = String.format(TJ_KNOWN_LOCATION_MSG, location.getLongitude(), location.getLatitude());
-                            } else {
-                                Log.d(TAG, "Provider: " + provider //
-                                        + " Long: unknown Lat: unknown");
-
-                                text = TJ_UNKNOWN_LOCATION_MSG;
+                            @Override
+                            public void onStatusChanged(String provider, int status, Bundle extras) {
+                                // if (status != LocationProvider.AVAILABLE) {
+                                // Log.d(TAG,
+                                // "Location service not available. Trying to use last known location as fallback.");
+                                // sendLocation(locationManager.getLastKnownLocation(provider), originatingAddress);
+                                // }
                             }
 
-                            SmsManager.getDefault().sendTextMessage(originatingAddress, null, text, null, null);
-                        }
-                    }, null);
+                            @Override
+                            public void onProviderEnabled(String provider) {
+                            }
+
+                            @Override
+                            public void onProviderDisabled(String provider) {
+                            }
+
+                            @Override
+                            public void onLocationChanged(Location location) {
+                                sendLocation(location, originatingAddress);
+                            }
+                        }, null);
+                    }
 
                     // do not let other apps get the TJ message
                     // TODO do not abort if more than one message. other messages need to be passed on...
