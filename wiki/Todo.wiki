@@ -1,14 +1,18 @@
 #labels Todo
-#) start as service (used BroadcastReceiver with SMS_RECEIVED Filter)
+===Initial Todo:===
+  #) start as service *(used BroadcastReceiver with SMS_RECEIVED Filter)*
+  #) read SMS *(done)*
+    *) trigger on SMS received
+  #) parse for "key" -> action *(done)*
+    *) save sender  *(done)*
+    *) get position *(done)*
+  #) return SMS with position *(done)*
+    *) compile SMS -> send to sender
+  #) delete SMS *(not needed, received/sent sms' will not show up)*
 
-#) read SMS (done)
-  #) trigger on SMS received
 
-#) parse for "key" -> action (done)
-  #) save sender  (done)
-  #) get position (done)
-
-#) return SMS with position (done)
-  #) compile SMS -> send to sender
-
-#) delete SMS (not needed, received/sent sms' will not show up)
+===Additional Todo:==
+  #) Review existing code
+  #) Refine/-factor existing code
+  #) Test on real device
+  #) Additional app which shows location on (Google) maps?
