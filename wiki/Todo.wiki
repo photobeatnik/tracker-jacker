@@ -1,14 +1,14 @@
 #labels Todo
-0) start as service
+#) start as service (used BroadcastReceiver with SMS_RECEIVED Filter)
 
-1) read SMS
-	1.1) trigger on SMS received
+#) read SMS (done)
+  #) trigger on SMS received
 
-2) parse for "key" -> action
-	2.1) save sender
-	2.2) get position
+#) parse for "key" -> action (done)
+  #) save sender  (done)
+  #) get position (done)
 
-3) return SMS with position
-	3.1) compile SMS -> send to sender
+#) return SMS with position (done)
+  #) compile SMS -> send to sender
 
-4) delete SMS
+#) delete SMS (not needed, received/sent sms' will not show up)
