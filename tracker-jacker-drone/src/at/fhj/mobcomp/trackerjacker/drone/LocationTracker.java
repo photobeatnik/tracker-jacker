@@ -1,4 +1,4 @@
-package at.fhj.mobcomp.trackerjacker.receiver;
+package at.fhj.mobcomp.trackerjacker.drone;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import at.fhj.mobcomp.trackerjacker.util.Constants;
+import at.fhj.mobcomp.trackerjacker.commons.Constants;
 
 /**
  * Tracks the location of a mobile device by waiting a specific text message and sending back the location to the origin

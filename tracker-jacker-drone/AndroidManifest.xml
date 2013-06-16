@@ -22,7 +22,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="at.fhj.mobcomp.trackerjacker.MainActivity"
+            android:name="at.fhj.mobcomp.trackerjacker.drone.MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,7 @@
 
         <!-- Register a receiver to intercept text messages. -->
         <receiver
-            android:name="at.fhj.mobcomp.trackerjacker.receiver.LocationTracker"
+            android:name="at.fhj.mobcomp.trackerjacker.drone.LocationTracker"
             android:enabled="true" >
 
             <!-- Set to highest possible priority to intercept SMS and abort broadcast if needed. -->

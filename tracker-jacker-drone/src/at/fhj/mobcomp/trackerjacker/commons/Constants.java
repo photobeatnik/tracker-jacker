@@ -1,4 +1,4 @@
-package at.fhj.mobcomp.trackerjacker.util;
+package at.fhj.mobcomp.trackerjacker.commons;
 
 public class Constants {
 
