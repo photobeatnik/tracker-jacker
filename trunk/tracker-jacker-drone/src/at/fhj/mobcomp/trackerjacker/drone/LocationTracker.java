@@ -114,7 +114,7 @@ public class LocationTracker extends BroadcastReceiver {
 
                     if (location != null) {
                         Log.d(TAG, "Using last known location...");
-                        sendLocation(originatingAddress, location, Constants.LAST_KNOWN_LOCATION_METHOD);
+                        sendLocation(originatingAddress, location, Constants.LAST_KNOWN_LOCATION_METHOD + Constants.SEPARATOR + provider);
                     } else {
                         Log.d(TAG, "Last known location unkown. Waiting for location update...");
                         locationManager.requestSingleUpdate(provider, new LocationListener() {
@@ -135,7 +135,7 @@ public class LocationTracker extends BroadcastReceiver {
 
                             @Override
                             public void onLocationChanged(Location location) {
-                                sendLocation(originatingAddress, location, Constants.ACTUAL_LOCATION_METHOD);
+                                sendLocation(originatingAddress, location, Constants.ACTUAL_LOCATION_METHOD + Constants.SEPARATOR + provider);
                             }
                         }, null);
                     }
