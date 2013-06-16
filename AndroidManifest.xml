@@ -37,7 +37,7 @@
 
         <!-- Register a receiver to intercept text messages. -->
         <receiver
-            android:name="at.fhj.mobcomp.trackerjacker.receiver.SMSReceiver"
+            android:name="at.fhj.mobcomp.trackerjacker.receiver.LocationTracker"
             android:enabled="true" >
 
             <!-- Set to highest possible priority to intercept SMS and abort broadcast if needed. -->
