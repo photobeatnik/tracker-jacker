@@ -1,4 +1,4 @@
-package at.fhj.mobcomp.trackerjacker;
+package at.fhj.mobcomp.trackerjacker.drone;
 
 import android.app.Activity;
 import android.os.Bundle;
