@@ -14,9 +14,9 @@ import android.util.Log;
 import at.fhj.mobcomp.trackerjacker.util.Constants;
 
 /**
- * Tracks the location of a mobile device by waiting a specific text message and
- * sending back the location to the origin of the message.
- * <br /><br />
+ * Tracks the location of a mobile device by waiting a specific text message and sending back the location to the origin
+ * of the message. <br />
+ * <br />
  *
  * SMS Sending/Receiving based on:
  * <ul>
@@ -47,22 +47,35 @@ public class LocationTracker extends BroadcastReceiver {
     /**
      * Send the location as text message to the given destination address.
      *
-     * @param location
-     *            Specifies the location to use.
      * @param destinationAddress
      *            Specifies the address which should receive the location.
+     * @param location
+     *            Specifies the location to use.
+     * @param method
+     *            How the location was found either Constants.LAST_KNOWN_LOCATION_METHOD or
+     *            Constants.ACUTAL_LOCATION_METHOD.
      */
-    private void sendLocation(Location location, String destinationAddress) {
-        final String text;
+    private void sendLocation(String destinationAddress, Location location, String method) {
+        final String locationString;
 
-        if (location != null) {
-            text = String.format(Constants.KNOWN_LOCATION_MSG, location.getLongitude(), location.getLatitude());
+        // if location object is not initialized, the location is unknown
+        if (location == null) {
+            locationString = Constants.UNKOWN_LOCATION;
         } else {
-            text = Constants.UNKNOWN_LOCATION_MSG;
+            // build string like <key>:<lat>:<long>
+            // TODO add bearing, altitude and confidence?
+            locationString = new StringBuilder() //
+                    .append(method).append(Constants.SEPARATOR) //
+                    .append(location.getLatitude()).append(Constants.SEPARATOR) //
+                    .append(location.getLongitude()).toString();
         }
 
-        Log.d(TAG, "Sending location: " + text + " to: " + destinationAddress);
-        SmsManager.getDefault().sendTextMessage(destinationAddress, null, text, null, null);
+        // message will look like:
+        // * tj:loc(<key>:<lat>:<long>)
+        // * tj:loc(unknown)
+        final String locationMessage = String.format(Constants.SEND_LOCATION_MSG, locationString);
+        Log.d(TAG, "Sending location: " + locationMessage + " to: " + destinationAddress);
+        SmsManager.getDefault().sendTextMessage(destinationAddress, null, locationMessage, null, null);
     }
 
     @Override
@@ -101,7 +114,7 @@ public class LocationTracker extends BroadcastReceiver {
 
                     if (location != null) {
                         Log.d(TAG, "Using last known location...");
-                        sendLocation(location, originatingAddress);
+                        sendLocation(originatingAddress, location, Constants.LAST_KNOWN_LOCATION_METHOD);
                     } else {
                         Log.d(TAG, "Last known location unkown. Waiting for location update...");
                         locationManager.requestSingleUpdate(provider, new LocationListener() {
@@ -122,7 +135,7 @@ public class LocationTracker extends BroadcastReceiver {
 
                             @Override
                             public void onLocationChanged(Location location) {
-                                sendLocation(location, originatingAddress);
+                                sendLocation(originatingAddress, location, Constants.ACTUAL_LOCATION_METHOD);
                             }
                         }, null);
                     }
