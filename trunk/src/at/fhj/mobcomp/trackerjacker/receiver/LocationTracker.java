@@ -11,11 +11,14 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import at.fhj.mobcomp.trackerjacker.util.Constants;
 
 /**
- * Receives and sends SMS/text message.<br />
+ * Tracks the location of a mobile device by waiting a specific text message and
+ * sending back the location to the origin of the message.
+ * <br /><br />
  *
- * Based on:
+ * SMS Sending/Receiving based on:
  * <ul>
  * <li><a href="http://www.slideshare.net/androidstream/android-application-component- broadcastreceiver-tutorial
  * ">http://www.slideshare.net/androidstream/android-application-component- broadcastreceiver-tutorial</a></li>
@@ -25,7 +28,7 @@ import android.util.Log;
  * ://stackoverflow.com/questions/1973071/broadcastreceiver-sms-received</a></li>
  * </ul>
  * <br />
- * Gets GPS coordinates based on:
+ * Location tracking based on:
  * <ul>
  * <li><a
  * href="http://stackoverflow.com/questions/5240246/broadcastreceiver-for-location">http://stackoverflow.com/questions
@@ -33,34 +36,13 @@ import android.util.Log;
  * <li><a href="http://www.vogella.com/articles/AndroidLocationAPI/article.html">http://www.vogella.com/articles/
  * AndroidLocationAPI/article.html</a></li>
  * </ul>
- *
- * @author Stefan Eder (<a href="mailto:adenoidhynkel666@gmail.com">adenoidhynkel666
- * @gmail.com</a>)
- *
  */
-public class SMSReceiver extends BroadcastReceiver {
+public class LocationTracker extends BroadcastReceiver {
 
-    private static final String TAG = SMSReceiver.class.getSimpleName();
+    private static final String TAG = LocationTracker.class.getSimpleName();
+
+    /** Key for getting PDUs from bundle object. */
     private static final String PDUS_KEY = "pdus";
-
-    /**
-     * Prefix which indicates this is a message from the Tracker Jacker app.
-     */
-    private static final String TJ_PREFIX = "tj";
-
-    /**
-     * Indicates the command for the getting the location. TODO Move this somewhere global (also relevant for sending)
-     * and make configurable?
-     */
-    private static final String TJ_GET_LOCATION_CMD = "whereareyou";
-
-    /**
-     * Indicates the location message of the application.
-     */
-    private static final String TJ_GET_LOCATION_MSG = TJ_PREFIX + ":" + TJ_GET_LOCATION_CMD;
-
-    private static final String TJ_KNOWN_LOCATION_MSG = TJ_PREFIX + ":loc(%f:%f)";
-    private static final String TJ_UNKNOWN_LOCATION_MSG = TJ_PREFIX + ":loc(unknown)";
 
     /**
      * Send the location as text message to the given destination address.
@@ -74,9 +56,9 @@ public class SMSReceiver extends BroadcastReceiver {
         final String text;
 
         if (location != null) {
-            text = String.format(TJ_KNOWN_LOCATION_MSG, location.getLongitude(), location.getLatitude());
+            text = String.format(Constants.KNOWN_LOCATION_MSG, location.getLongitude(), location.getLatitude());
         } else {
-            text = TJ_UNKNOWN_LOCATION_MSG;
+            text = Constants.UNKNOWN_LOCATION_MSG;
         }
 
         Log.d(TAG, "Sending location: " + text + " to: " + destinationAddress);
@@ -100,12 +82,11 @@ public class SMSReceiver extends BroadcastReceiver {
                 Log.d(TAG, "From: " + originatingAddress + " Body: " + messageBody);
 
                 // TODO also add check whether source of SMS is authorized to get location? (configurable number list)
-                if (TJ_GET_LOCATION_MSG.equals(messageBody)) {
+                if (Constants.GET_LOCATION_MSG.equals(messageBody)) {
                     Log.d(TAG, "Message (" + messageBody + ") equals location message. Sending back location...");
 
                     // get gps coordinates and send back message to originator
-                    // TODO probably better to start this in a service and own thread/process
-                    // TODO it is possible deactivated -> let user activate first? in app?
+                    // TODO location service possible deactivated -> let user activate first? in app?
                     // get the location manager from the context
                     final LocationManager locationManager = (LocationManager) context
                             .getSystemService(Context.LOCATION_SERVICE);
@@ -114,10 +95,11 @@ public class SMSReceiver extends BroadcastReceiver {
 
                     // request a single update of the location with provider.
                     // locationManager.getLastKnownLocation(provider); <-- did not work with emulator
-                    // TODO getLastKnownLocation as fallback? (dont know if this works)
+                    // TODO getLastKnownLocation as fallback and not fresh location? (maybe works on real device)
+                    // TODO test this on real device
                     final Location location = locationManager.getLastKnownLocation(provider);
 
-                    if (location == null) {
+                    if (location != null) {
                         Log.d(TAG, "Using last known location...");
                         sendLocation(location, originatingAddress);
                     } else {
@@ -126,11 +108,8 @@ public class SMSReceiver extends BroadcastReceiver {
 
                             @Override
                             public void onStatusChanged(String provider, int status, Bundle extras) {
-                                // if (status != LocationProvider.AVAILABLE) {
-                                // Log.d(TAG,
-                                // "Location service not available. Trying to use last known location as fallback.");
-                                // sendLocation(locationManager.getLastKnownLocation(provider), originatingAddress);
-                                // }
+                                // debug to see if this is called in case no update happens
+                                Log.d(TAG, "Status changed: " + status);
                             }
 
                             @Override
