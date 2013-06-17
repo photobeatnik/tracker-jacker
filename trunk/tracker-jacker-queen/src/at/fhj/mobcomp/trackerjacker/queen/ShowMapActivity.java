@@ -1,20 +1,18 @@
 package at.fhj.mobcomp.trackerjacker.queen;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class QueenActivity extends FragmentActivity {
+public class ShowMapActivity extends FragmentActivity {
 
     // @Override
     // protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +27,9 @@ public class QueenActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_queen);
-        // map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-        // .getMap();
+        setContentView(R.layout.activity_show_map);
 
+        // SupportMapFragment to support older APIs (http://stackoverflow.com/a/14128296/2174032)
         map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
         Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));

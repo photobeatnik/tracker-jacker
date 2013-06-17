@@ -6,8 +6,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".QueenActivity" >
+    tools:context=".ShowMapActivity" >
 
+    <!-- use SupportMapFragment instead of MapFragment to support older APIs (http://stackoverflow.com/a/14128296/2174032) -->
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
