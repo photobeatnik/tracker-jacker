@@ -11,9 +11,9 @@
     <string name="default_tracking_message">whereareyou</string>
     <string name="show_status">Status:</string>
     <string name="status_default">Waiting for message to be sent.</string>
-    <string name="status_sending">Sending message...</string>
+    <string name="status_sending">Sending message&#8230;</string>
     <string name="status_sent">Message sent.</string>
-    <string name="status_delivered">Message delivered. Waiting for answer...</string>
+    <string name="status_delivered">Message delivered. Waiting for answer&#8230;</string>
     <string name="status_error_sent">Message was not sent.</string>
     <string name="status_error_delivered">Message was not delivered.</string>
 
