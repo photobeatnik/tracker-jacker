@@ -1,15 +1,8 @@
 package at.fhj.mobcomp.trackerjacker.queen.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.provider.VoicemailContract;
-import android.telephony.SmsManager;
 
 public class TextMessageHandler extends AsyncTask<String, String, Void> {
 
