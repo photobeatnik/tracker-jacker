@@ -1,24 +1,22 @@
 package at.fhj.mobcomp.trackerjacker.queen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.Menu;
+import at.fhj.mobcomp.trackerjacker.commons.Constants;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ShowMapActivity extends FragmentActivity {
 
-    // @Override
-    // protected void onCreate(Bundle savedInstanceState) {
-    // super.onCreate(savedInstanceState);
-    // setContentView(R.layout.activity_queen);
-    // }
+    private static final String TAG = ShowMapActivity.class.getSimpleName();
 
     static final LatLng HAMBURG = new LatLng(53.558, 9.927);
     static final LatLng KIEL = new LatLng(53.551, 9.993);
@@ -29,18 +27,35 @@ public class ShowMapActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
 
-        // SupportMapFragment to support older APIs (http://stackoverflow.com/a/14128296/2174032)
-        map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+        final Intent intent = getIntent();
 
-        Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
-        Marker kiel = map.addMarker(new MarkerOptions().position(KIEL).title("Kiel").snippet("Kiel is cool")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
+        if (intent != null) {
 
-        // Move the camera instantly to hamburg with a zoom of 15.
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15));
+            // get data from intent
+            final String address = intent.getStringExtra(Constants.KEY_ADDRESS);
+            final String method = intent.getStringExtra(Constants.KEY_METHOD);
+            final String provider = intent.getStringExtra(Constants.KEY_PROVIDER);
+            final Double latitude = intent.getDoubleExtra(Constants.KEY_LATITUDE, 0.0);
+            final Double longitude = intent.getDoubleExtra(Constants.KEY_LONGITUDE, 0.0);
 
-        // Zoom in, animating the camera.
-        map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+            final LatLng position = new LatLng(latitude, longitude);
+
+            MarkerOptions options = new MarkerOptions() //
+                    .position(position) //
+                    .title(PhoneNumberUtils.formatNumber(address)) //
+                    .snippet("Provider: " + provider + " Method: " + method) //
+                    .visible(true) //
+                    .draggable(false);
+
+            // SupportMapFragment to support older APIs (http://stackoverflow.com/a/14128296/2174032)
+            map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+            map.addMarker(options);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+
+        } else {
+            Log.e(TAG, "There was no intent...");
+        }
+
     }
 
     @Override

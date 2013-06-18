@@ -9,10 +9,14 @@
             http://www.androidhive.info/2012/02/android-custom-listview-with-image-and-text/
             http://www.androidhive.info/2012/05/android-combining-tab-layout-and-list-view/
          How to set up Google API:
-         	https://developers.google.com/maps/documentation/android/start
+             https://developers.google.com/maps/documentation/android/start
          How to get Maps API v2 running in emulator:
-    		http://stackoverflow.com/a/17036337/2174032 
+            http://stackoverflow.com/a/17036337/2174032
     -->
+
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="17" />
 
     <permission
         android:name="at.fhj.mobcomp.trackerjacker.queen.permission.MAPS_RECEIVE"
@@ -45,14 +49,15 @@
 
         <activity
             android:name="at.fhj.mobcomp.trackerjacker.queen.ShowMapActivity"
-            android:label="@string/title_activity_queen" >
+            android:label="@string/title_activity_show_map" >
+            <intent-filter>
+            </intent-filter>
         </activity>
         <activity
             android:name="at.fhj.mobcomp.trackerjacker.queen.SendMessageActivity"
-            android:label="@string/title_activity_send_message" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
