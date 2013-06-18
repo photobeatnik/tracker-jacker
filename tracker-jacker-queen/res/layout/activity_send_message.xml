@@ -17,9 +17,8 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/enter_phone_number"
+            android:text="@string/enter_tracking_message"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-
     </TableRow>
 
     <TableRow
@@ -28,14 +27,42 @@
         android:layout_height="wrap_content" >
 
         <EditText
+            android:id="@+id/trackingMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/default_tracking_message" >
+
+            <requestFocus />
+        </EditText>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_phone_number"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <EditText
             android:id="@+id/phoneEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="phone" >
-
-            <requestFocus />
-        </EditText>
+            android:inputType="phone" />
 
         <Button
             android:id="@+id/sendButton"
@@ -43,6 +70,20 @@
             android:layout_height="wrap_content"
             android:onClick="sendTrackingMessage"
             android:text="@string/send" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/status_default"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </TableRow>
 

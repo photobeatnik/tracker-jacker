@@ -1,17 +1,21 @@
 package at.fhj.mobcomp.trackerjacker.queen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import at.fhj.mobcomp.trackerjacker.commons.Constants;
+import at.fhj.mobcomp.trackerjacker.queen.receiver.MessageDeliveredReceiver;
+import at.fhj.mobcomp.trackerjacker.queen.receiver.MessageSentReceiver;
 
 /**
  *
@@ -23,14 +27,18 @@ public class SendMessageActivity extends Activity {
 
     private static final String TAG = SendMessageActivity.class.getSimpleName();
 
-    private EditText phoneNumberEdit;
+    private EditText messageEdit;
+    private EditText phoneEdit;
+    private TextView statusTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_message);
 
-        phoneNumberEdit = (EditText) findViewById(R.id.phoneEdit);
+        phoneEdit = (EditText) findViewById(R.id.phoneEdit);
+        messageEdit = (EditText) findViewById(R.id.trackingMessage);
+        statusTextView = (TextView) findViewById(R.id.statusTextView);
     }
 
     @Override
@@ -44,59 +52,22 @@ public class SendMessageActivity extends Activity {
      * Sends the tracking text message to the specified phone number.
      */
     public void sendTrackingMessage(final View view) {
-        // read tracking text (zauberwort) from edit field
-        // read phone number from edit field
+        statusTextView.setText(R.string.status_sending);
 
-        final String destinationAddress = phoneNumberEdit.getText().toString();
-        Log.d(TAG, destinationAddress);
+        String trackingMessage = Constants.PREFIX + Constants.SEPARATOR + messageEdit.getText().toString();
+        String destinationAddress = phoneEdit.getText().toString();
 
-        // send text message
-        // TODO send with delivery and sent intent to make loading screen react to it!!
-        // SmsManager.getDefault().sendTextMessage(destinationAddress, null, "tj:wherareyou", null, null);
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(Constants.SMS_SENT), 0);
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0, new Intent(Constants.SMS_DELIVERED), 0);
 
-        // Additionally:
-        // create please wait screen/disable edit fields buttons on activity?
-        // or switch activity to "please wait" screen (with timeout?)
+        Log.d(TAG, "Registering sending status receiver.");
+        registerReceiver(new MessageSentReceiver(this), new IntentFilter(Constants.SMS_SENT));
 
-        // this is just a place holder... for playing with progress dialog
-        AsyncTask<Integer, String, Void> task = new AsyncTask<Integer, String, Void>() {
-            ProgressDialog dialog;
+        Log.d(TAG, "Registering delivery status receiver.");
+        registerReceiver(new MessageDeliveredReceiver(this), new IntentFilter(Constants.SMS_DELIVERED));
 
-            protected void onPreExecute() {
-                dialog = new ProgressDialog(SendMessageActivity.this);
-                dialog.show();
-            }
-
-            @Override
-            protected Void doInBackground(Integer... params) {
-                List<String> messages = new ArrayList<String>();
-                messages.add("Sending tracking SMS...");
-                messages.add("Tracking message sent...");
-                messages.add("Delivered! Waiting for answer...");
-
-                for (String message : messages) {
-                    try {
-                        // dialog.setMessage(message);
-                        publishProgress(message);
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        // do nothing
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-                dialog.setMessage(values[0]);
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                dialog.dismiss();
-            }
-        };
-
-        task.execute(1);
+        SmsManager sms = SmsManager.getDefault();
+        Log.d(TAG, "Sending message: " + trackingMessage + " to: " + destinationAddress);
+        sms.sendTextMessage(destinationAddress, null, trackingMessage, sentPI, deliveredPI);
     }
 }
