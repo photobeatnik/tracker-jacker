@@ -31,6 +31,7 @@ public class WaitForAnswerReceiver extends BroadcastReceiver {
 
                 // TODO also add check whether source of SMS is authorized to get location? (configurable number list)
                 if (messageBody.startsWith(Constants.LOCATION_MESSAGE)) {
+                    abortBroadcast();
 
                     // "parse" the location message
                     final int start = messageBody.indexOf("(") + 1;
@@ -51,7 +52,6 @@ public class WaitForAnswerReceiver extends BroadcastReceiver {
                     context.startActivity(showMapIntent);
 
                     context.unregisterReceiver(this);
-                    abortBroadcast();
                 }
             }
         }
