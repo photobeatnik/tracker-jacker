@@ -4,5 +4,9 @@
     <string name="app_name">Tracker Jacker Drone</string>
     <string name="title_activity_main">Tracker Jacker Drone</string>
     <string name="hello_world">Hello world!</string>
-
+    <string name="configuration">Configuration</string>
+    <string name="enter_key">Enter key:</string>
+    <string name="default_key">whereareyou</string>
+     <string name="save">Save</string>
+    
 </resources>
