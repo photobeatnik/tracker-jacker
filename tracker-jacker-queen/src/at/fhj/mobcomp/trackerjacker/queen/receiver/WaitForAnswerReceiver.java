@@ -9,10 +9,12 @@ import android.util.Log;
 import at.fhj.mobcomp.trackerjacker.commons.Constants;
 import at.fhj.mobcomp.trackerjacker.queen.ShowMapActivity;
 
+// tj:whereareyou
+// tj:loc(al:gps:47.453056:15.331944)
 public class WaitForAnswerReceiver extends BroadcastReceiver {
 
     private static final String TAG = WaitForAnswerReceiver.class.getSimpleName();
-
+    
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Message received (" + intent.getAction() + ")");
@@ -50,8 +52,7 @@ public class WaitForAnswerReceiver extends BroadcastReceiver {
                     showMapIntent.putExtra(Constants.KEY_METHOD, method);
                     showMapIntent.putExtra(Constants.KEY_PROVIDER, provider);
                     context.startActivity(showMapIntent);
-
-                    context.unregisterReceiver(this);
+//                    context.unregisterReceiver(this);
                 }
             }
         }
