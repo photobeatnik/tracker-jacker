@@ -4,15 +4,15 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <!-- Useful links:
+    <!--
+         Useful links:
             http://cyrilmottier.com/2011/11/23/listview-tips-tricks-4-add-several-clickable-areas/
             http://www.androidhive.info/2012/02/android-custom-listview-with-image-and-text/
             http://www.androidhive.info/2012/05/android-combining-tab-layout-and-list-view/
          How to set up Google API:
              https://developers.google.com/maps/documentation/android/start
          How to get Maps API v2 running in emulator:
-            http://stackoverflow.com/a/17036337/2174032
-    -->
+            http://stackoverflow.com/a/17036337/2174032    -->
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -58,6 +58,7 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

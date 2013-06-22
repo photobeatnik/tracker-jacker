@@ -110,12 +110,12 @@ public class LocationTracker extends BroadcastReceiver {
                     // locationManager.getLastKnownLocation(provider); <-- did not work with emulator
                     // TODO getLastKnownLocation as fallback and not fresh location? (maybe works on real device)
                     // TODO test this on real device
-                    final Location location = locationManager.getLastKnownLocation(provider);
+//                    final Location location = locationManager.getLastKnownLocation(provider);
 
-                    if (location != null) {
-                        Log.d(TAG, "Using last known location...");
-                        sendLocation(originatingAddress, location, Constants.LAST_KNOWN_LOCATION_METHOD + Constants.SEPARATOR + provider);
-                    } else {
+//                    if (location != null) {
+//                        Log.d(TAG, "Using last known location...");
+//                        sendLocation(originatingAddress, location, Constants.LAST_KNOWN_LOCATION_METHOD + Constants.SEPARATOR + provider);
+//                    } else {
                         Log.d(TAG, "Last known location unkown. Waiting for location update...");
                         locationManager.requestSingleUpdate(provider, new LocationListener() {
 
@@ -138,10 +138,10 @@ public class LocationTracker extends BroadcastReceiver {
                                 sendLocation(originatingAddress, location, Constants.ACTUAL_LOCATION_METHOD + Constants.SEPARATOR + provider);
                             }
                         }, null);
-                    }
+//                    }
 
                     // do not let other apps get the TJ message
-                    // TODO do not abort if more than one message. other messages need to be passed on...
+                    // TODO do not abort if more than one message. other messages may need to be passed on...
                     abortBroadcast();
                 }
             }
