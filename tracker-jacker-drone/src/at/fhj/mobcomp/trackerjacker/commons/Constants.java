@@ -7,12 +7,14 @@ public class Constants {
 
     public static final String SEPARATOR = ":";
 
-    /** Indicates the command for the getting the location. */
+    ///** Indicates the command for the getting the location. */
     // TODO make configurable?
-    private static final String GET_LOCATION_CMD = "whereareyou";
+    //public static final String GET_LOCATION_CMD = "whereareyou";
+    
+    public static final String GET_LOCATION_KEY = "command";
 
-    /** Indicates the location message of the application. */
-    public static final String GET_LOCATION_MSG = MSG_PREFIX + SEPARATOR + GET_LOCATION_CMD;
+    ///** Indicates the location message of the application. */
+    //public static final String GET_LOCATION_MSG = MSG_PREFIX + SEPARATOR + GET_LOCATION_CMD;
 
     public static final String SEND_LOCATION_MSG = MSG_PREFIX + SEPARATOR + "loc(%s)";
 

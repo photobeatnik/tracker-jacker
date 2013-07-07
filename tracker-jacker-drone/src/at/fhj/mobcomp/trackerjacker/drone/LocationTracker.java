@@ -3,11 +3,13 @@ package at.fhj.mobcomp.trackerjacker.drone;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -95,7 +97,11 @@ public class LocationTracker extends BroadcastReceiver {
                 Log.d(TAG, "From: " + originatingAddress + " Body: " + messageBody);
 
                 // TODO also add check whether source of SMS is authorized to get location? (configurable number list)
-                if (Constants.GET_LOCATION_MSG.equals(messageBody)) {
+                final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                final String defaultCmd = context.getString(R.string.default_cmd);
+                final String locationCmd = "tj:" + prefs.getString(Constants.GET_LOCATION_KEY, defaultCmd);
+                
+                if (locationCmd.equals(messageBody)) {
                     Log.d(TAG, "Message (" + messageBody + ") equals location message. Sending back location...");
 
                     // get gps coordinates and send back message to originator
