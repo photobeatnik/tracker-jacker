@@ -40,12 +40,12 @@
         android:layout_height="wrap_content" >
 
         <EditText
-            android:id="@+id/key"
+            android:id="@+id/commandEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="text"
-            android:text="@string/default_key" >
+            android:inputType="textNoSuggestions"
+            android:text="@string/default_cmd" >
 
             <requestFocus />
         </EditText>
@@ -61,7 +61,7 @@
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="savekey"
+            android:onClick="saveCommand"
             android:text="@string/save" />
 
     </TableRow>
