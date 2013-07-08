@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tracker Jacker Drone</string>
+    <string name="title_activity_main">Tracker Jacker Drone</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="configuration">Configuration</string>
+    <string name="enter_key">Enter key:</string>
+    <string name="default_cmd">whereareyou</string>
+     <string name="save">Save</string>
+    
+</resources>
