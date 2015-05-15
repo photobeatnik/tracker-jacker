@@ -1,0 +1,1 @@
+Tracker Jacker is a sample (in)security app for the MobComp1 course at FHJ. It allows "tracking" of the -infected- mobile device by sending text message (SMS) to it. The app will response with a GPS string which will be parsed and shown in Google maps on the device of the attacker.
